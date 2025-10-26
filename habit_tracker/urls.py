@@ -15,16 +15,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.urls import path, include
 
-from habits.views import HabitLogViewSet
+from habits.views import HabitLogViewSet, PublicHabitsList
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/habits/', include('habits.urls')),
+    path('api/public-habits/', PublicHabitsList.as_view(), name='public-habits'),
     path('api-auth/', include('rest_framework.urls')),
     path('api/habit-logs/', HabitLogViewSet.as_view({
         'get': 'list', 'post': 'create'}), name='habit-log-list'),
     path('api/habit-logs/<int:pk>/', HabitLogViewSet.as_view({
         'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), name='habit-log-detail'),
+    path('', lambda request: redirect('/api/habits/')),
 ]
