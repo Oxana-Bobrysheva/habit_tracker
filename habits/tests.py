@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.http import HttpRequest
 from rest_framework.test import APIClient
 from habits.models import Habit, HabitLog
-from habits.serializers import HabitSerializer, HabitLogSerializer
+from habits.serializers import HabitSerializer
 
 
 class HabitModelTest(TestCase):
@@ -140,7 +140,8 @@ class HabitAPITest(TestCase):
         self.assertEqual(Habit.objects.count(), 2)
 
     def test_update_habit(self):
-        habit = Habit.objects.create(user=self.user, **{**self.habit_data, 'related_habit': self.pleasant_habit})  # Используем экземпляр
+        habit = Habit.objects.create(
+            user=self.user, **{**self.habit_data, 'related_habit': self.pleasant_habit})
         update_data = self.habit_data.copy()
         update_data['name'] = 'Updated Habit'
         response = self.client.put(f'/api/habits/{habit.id}/', update_data, format='json')
@@ -149,14 +150,18 @@ class HabitAPITest(TestCase):
         self.assertEqual(habit.name, 'Updated Habit')
 
     def test_delete_habit(self):
-        habit = Habit.objects.create(user=self.user, **{**self.habit_data, 'related_habit': self.pleasant_habit})  # Используем экземпляр
+        habit = Habit.objects.create(
+            user=self.user, **{**self.habit_data, 'related_habit': self.pleasant_habit})
         response = self.client.delete(f'/api/habits/{habit.id}/')
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Habit.objects.count(), 1)  # Обновлено: 1 pleasant remains
 
     def test_public_habits_unauthenticated(self):
         self.client.logout()  # Разлогиниваемся
-        habit = Habit.objects.create(user=self.user, **{**self.habit_data, 'is_public': True, 'related_habit': self.pleasant_habit})  # Используем экземпляр
+        habit = Habit.objects.create(
+            user=self.user, **{**self.habit_data, 'is_public': True,
+                               'related_habit': self.pleasant_habit})
+        print(habit)
         response = self.client.get('/api/public-habits/')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data['results']), 1)

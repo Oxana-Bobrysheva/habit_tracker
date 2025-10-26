@@ -1,9 +1,9 @@
-import asyncio
 import os
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from telegram.ext import Application, CommandHandler
 from telegram_bot.views import start  # Import your async start handler from views.py
+
 
 class Command(BaseCommand):
     help = 'Run Telegram bot in polling mode'

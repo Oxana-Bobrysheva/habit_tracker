@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions, serializers
+from rest_framework import generics, serializers
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.viewsets import ModelViewSet
 
@@ -16,12 +16,14 @@ class HabitListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+
 class HabitDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = HabitSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Habit.objects.filter(user=self.request.user)
+
 
 class HabitLogViewSet(ModelViewSet):
     queryset = HabitLog.objects.all()
@@ -37,6 +39,7 @@ class HabitLogViewSet(ModelViewSet):
         if not Habit.objects.filter(id=habit_id, user=self.request.user).exists():
             raise serializers.ValidationError("You can only log habits you own.")
         serializer.save(habit_id=habit_id)
+
 
 class PublicHabitsList(generics.ListAPIView):
     serializer_class = HabitSerializer

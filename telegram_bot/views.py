@@ -12,6 +12,7 @@ TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 bot = Bot(token=TELEGRAM_BOT_TOKEN)
 application = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
 
+
 # Define async handlers (e.g., for /start)
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_id_str = context.args[0] if context.args else None
@@ -34,6 +35,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 # Add handlers to application (do this once, outside views)
 application.add_handler(CommandHandler("start", start))
+
 
 @csrf_exempt
 @require_http_methods(["POST"])

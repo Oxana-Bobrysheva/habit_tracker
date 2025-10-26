@@ -3,11 +3,13 @@ from django.utils import timezone
 from rest_framework import serializers
 from .models import Habit, HabitLog
 
+
 class HabitLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = HabitLog
         fields = ['id', 'habit', 'completed_at', 'notes']
         read_only_fields = ['id']
+
 
 class HabitSerializer(serializers.ModelSerializer):
     logs = HabitLogSerializer(many=True, read_only=True)  # Nested для просмотра прогресса (логов)
