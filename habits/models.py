@@ -80,3 +80,12 @@ class HabitLog(models.Model):
 
     def __str__(self):
         return f"{self.habit.name} - {self.completed_at.date()}"
+
+
+class TelegramChat(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    chat_id = models.CharField(max_length=50, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s Telegram Chat"

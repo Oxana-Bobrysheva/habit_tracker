@@ -30,4 +30,5 @@ urlpatterns = [
     path('api/habit-logs/<int:pk>/', HabitLogViewSet.as_view({
         'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), name='habit-log-detail'),
     path('', lambda request: redirect('/api/habits/')),
+    path('telegram/', include('telegram_bot.urls')),
 ]
